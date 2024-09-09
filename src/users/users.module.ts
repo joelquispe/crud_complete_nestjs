@@ -9,6 +9,7 @@ import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity,CoursesEntity])],
+  controllers: [UsersController],
   providers: [UsersService,JwtStrategy]
 })
 export class UsersModule {}

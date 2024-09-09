@@ -8,16 +8,19 @@ import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './jwt.constants';
 import { UsersModule } from 'src/users/users.module';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthEntity]),
     PassportModule,
     UsersModule,
+    
     JwtModule.register({
+      global: true,
       secret: jwtConstants.secretKey,
       signOptions: {
-        expiresIn: '60s',
+        expiresIn: '1h',
       },
     }),
   ],

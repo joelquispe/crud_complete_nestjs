@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthDto } from './auth.dto';
 import { Repository } from 'typeorm';
@@ -11,31 +11,39 @@ export class AuthService {
   constructor(
     @InjectRepository(AuthEntity)
     private authRepository: Repository<AuthEntity>,
-    private jwtService : JwtService
+    private jwtService: JwtService,
   ) {}
 
-  async login(body: any) {
+  async login(body: AuthDto) {
     const user = await this.authRepository.findOne({
       where: { username: body.username },
     });
     if (!user) return new HttpException('USER_NOT_FOUND', 403);
     const checkPassword = await compare(body.password, user.password);
     if (!checkPassword) return new HttpException('PASSWORD_INCORRECT', 403);
-    const payload = {id:user.id, username: user.username};
+    const payload = { id: user.id, username: user.username };
     const token = this.jwtService.sign(payload);
     const data = {
-        user: user,
-        token: token
-    }
+      access_token: token,
+    };
     return data;
   }
-  findOne(id:number) {
-    return this.authRepository.findOneBy({id:id});
+  findOne(id: number) {
+    return this.authRepository.findOneBy({ id: id });
   }
   async register(body: AuthDto) {
     const { password } = body;
+    body.role = 'admin';
     const plaintToHash = await hash(password, 10);
     body = { ...body, password: plaintToHash };
-    return this.authRepository.save(body);
+    try {
+      await this.authRepository.save(body)
+      return  {
+        "error": false,
+        "message": "user created"};
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+    
   }
 }

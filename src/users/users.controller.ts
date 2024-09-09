@@ -23,6 +23,8 @@ export class UsersController {
     findAlll(){
         return this.userService.findAll();
     }
+
+    
     
 
 }

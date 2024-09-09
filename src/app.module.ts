@@ -11,25 +11,29 @@ import { PhotoEntity } from './photo/photo.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { AuthModule } from './auth/auth.module';
 import { AuthEntity } from './auth/auth.entity';
+import { ProductsModule } from './products/products.module';
+import { ProductEntity } from './products/entities/product.entity';
 
 @Module({
   imports: [
-    UsersModule,
+    
     MulterModule.register({dest: './uploads'}),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: 'junction.proxy.rlwy.net',
+      port: 56885,
       username: 'root',
-      password: '',
+      password: 'kNCjAmWBnYTvjWhfbUnPdIdmzRDfievj',
+      retryDelay: 5000,
       synchronize: true,
-      entities: [UserEntity, CoursesEntity, PhotoEntity,AuthEntity],
-      database: 'crud_complete',
+      entities: [UserEntity, CoursesEntity, PhotoEntity,AuthEntity,ProductEntity],
+      database: 'railway',
     }),
-    
+    UsersModule,
     CoursesModule,
     PhotoModule,
     AuthModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
