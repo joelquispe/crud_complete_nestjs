@@ -28,8 +28,8 @@ export class AuthService {
     };
     return data;
   }
-  findOne(id: number) {
-    return this.authRepository.findOneBy({ id: id });
+  findOne(username: string) {
+    return this.authRepository.findOneBy({ username: username });
   }
   async register(body: AuthDto) {
     const { password } = body;

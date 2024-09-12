@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './auth.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -28,8 +28,8 @@ export class AuthController {
     hola(@Res() res:any){
         return res.send("joel") 
     }
-    @Get('/:id')
-    findOne(@Param('id') id:number){
-        return this.authService.findOne(id);
+    @Get('profile')
+    findOne(@Query('username') username:string){
+        return this.authService.findOne(username);
     }
 }
